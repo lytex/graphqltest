@@ -1,0 +1,12 @@
+[project]
+name = "graphql-test"
+version = "0.1.0"
+description = "GraphqQL and Django test app"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.2.4",
+    "dotenv>=0.9.9",
+    "graphene-django>=3.2.3",
+    "sqids>=0.5.2",
+]
