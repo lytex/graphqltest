@@ -12,7 +12,9 @@ class User(models.Model):
         HOBBY = 0, gettext_lazy("Hobby Plan")
         PRO = 1, gettext_lazy("Pro Plan")
 
-    plan = models.IntegerField(default=Plan.HOBBY, choices=Plan.choices)
+    plan = models.CharField(
+        default="hobby", choices=(("hobby", "Hobby plan"), ("pro", "Pro plan"))
+    )
 
 
 class App(models.Model):
@@ -20,8 +22,7 @@ class App(models.Model):
     active = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    class Active(models.IntegerChoices):
-        INACTIVE = 0, gettext_lazy("Inactive")
-        ACTIVE = 1, gettext_lazy("Active")
-
-    active = models.IntegerField(default=Active.INACTIVE, choices=Active.choices)
+    active = models.CharField(
+        default="active",
+        choices=(("inactive", "Inactive app"), ("active", "Active app")),
+    )
