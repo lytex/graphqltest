@@ -9,4 +9,5 @@ dependencies = [
     "dotenv>=0.9.9",
     "graphene-django>=3.2.3",
     "sqids>=0.5.2",
+    "uvicorn>=0.35.0",
 ]
