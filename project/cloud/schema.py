@@ -37,4 +37,23 @@ class Query(graphene.ObjectType):
         return App.objects.all()
 
 
-schema = graphene.Schema(query=Query)
+class UserMutation(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+        plan = graphene.String(required=True)
+
+    user = graphene.Field(UserType)
+
+    @classmethod
+    def mutate(cls, root, info, plan: str, id: str):
+        user = User.objects.get(pk=sqids.decode(id.lstrip("u_"))[0])
+        user.plan = plan
+        user.save()
+        return UserMutation(user=user)
+
+
+class Mutation(graphene.ObjectType):
+    update_question = UserMutation.Field()
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
