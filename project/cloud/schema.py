@@ -23,7 +23,7 @@ class AppType(DjangoObjectType):
         model = App
 
     def resolve_id(self, info):
-        return "u_" + sqids.encode([self.id])
+        return "app_" + sqids.encode([self.id])
 
 
 class Query(graphene.ObjectType):
@@ -51,9 +51,37 @@ class UserMutation(graphene.Mutation):
         user.save()
         return UserMutation(user=user)
 
+class UserMutationUpgrade(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+
+    user = graphene.Field(UserType)
+
+    @classmethod
+    def mutate(cls, root, info, plan: str, id: str):
+        user = User.objects.get(pk=sqids.decode(id.lstrip("u_"))[0])
+        user.plan = "PRO"
+        user.save()
+        return UserMutation(user=user)
+
+class UserMutationDowngrade(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+
+    user = graphene.Field(UserType)
+
+    @classmethod
+    def mutate(cls, root, info, plan: str, id: str):
+        user = User.objects.get(pk=sqids.decode(id.lstrip("u_"))[0])
+        user.plan = "HOBBY"
+        user.save()
+        return UserMutation(user=user)
+
 
 class Mutation(graphene.ObjectType):
-    update_question = UserMutation.Field()
+    update_user = UserMutation.Field()
+    upgradeAccount = UserMutationUpgrade.Field()
+    downgradeAccount = UserMutationDowngrade.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
