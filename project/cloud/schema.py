@@ -51,6 +51,7 @@ class UserMutation(graphene.Mutation):
         user.save()
         return UserMutation(user=user)
 
+
 class UserMutationUpgrade(graphene.Mutation):
     class Arguments:
         id = graphene.ID(required=True)
@@ -63,6 +64,7 @@ class UserMutationUpgrade(graphene.Mutation):
         user.plan = "PRO"
         user.save()
         return UserMutation(user=user)
+
 
 class UserMutationDowngrade(graphene.Mutation):
     class Arguments:
